@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tic Tac Toe</title>
+  <style>
+    .board {
+      display: grid;
+      grid-template-columns: repeat(3, 100px);
+      grid-template-rows: repeat(3, 100px);
+      gap: 2px;
+    }
+    .cell {
+      background-color: lightgray;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 2em;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="board"></div>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () { // documenti vra event e dnum erb lriv html load lini
+      const board = document.querySelector('.board'); // doc. vercnum e elemente
+      let currentPlayer = 'X';                        // sarqum e popoxakan entacik xaxacox 
+      let cells = Array.from({ length: 9 });          // sarqum e array vortex ka 8 el
+
+      function render() {                             // sarqel e func
+        board.innerHTML = '';                         // entrvac el i mej dnum e datark tox
+        cells.forEach((value, index) => {             // pttvum e stexcac array i vrayov vercnum e el yev index
+          const cell = document.createElement('div'); // documenti mej sarqum e div amen el ic
+          cell.classList.add('cell');                 // diveri vra dnum e class
+          cell.textContent = value || '';             // diveri mej dnum e value || datark tox
+          cell.addEventListener('click', () => handleCellClick(index)); // diveri vra dnum e click vore ashxatacnum e func, func n el vercnum e tvyal el i indexe
+          board.appendChild(cell);                    // parent divi mej dnum e child diverin, stexcum e taxtak
+        });
+      }
+
+      function handleCellClick(index) {                 // sarqec func vore mutqum vercnum e el i indexe
+        if (!cells[index]) {                            // stugum e, ete cells arrayi mej tvyal indexe chka, tox mtni if blocki mej
+          cells[index] = currentPlayer;                 // tvyal indexe darna currentPlayer
+          if (checkWinner()) {                          // ete checkWinner() func n true, tox mtni if i mej
+            alert(`${currentPlayer} wins!`);            // katari alert
+            resetGame();                                // xaxe zroyacni
+          } else if (isBoardFull()) {                   // ete isBoardFull() func n e true,
+            alert("It's a draw!");                      //  tox alert ani
+            resetGame();                                // xaxe zroyacni
+          } else {
+            currentPlayer = currentPlayer === 'X' ? 'O' : 'X'; // hakarak depqum, ete cells arrayi mej tvyal indexe ka, tox currentPlayer in veragri currentPlayer == 'X' ? 'O' : 'X'
+            render();                                   // kanchi  render() func e
+          }
+        }
+      }
+
+      function checkWinner() {     // func vortex kan haxtox arraynere
+        const winningCombos = [       
+          [0, 1, 2],
+          [3, 4, 5],
+          [6, 7, 8],
+          [0, 3, 6],
+          [1, 4, 7],
+          [2, 5, 8],
+          [0, 4, 8],
+          [2, 4, 6]
+        ];
+
+        return winningCombos.some(combination =>   // ete gone meke hamenkni
+          combination.every(index => cells[index] === currentPlayer) // bolor indexnere petq e linen currentPlayer, aysinqn nuyne
+        );
+      }
+
+      function isBoardFull() {
+        return cells.every(cell => cell); // stugum e ete lcvel e taxtake
+      }
+
+      function resetGame() {
+        cells = Array.from({ length: 9 }); // zroyacnum e xaxe
+        currentPlayer = 'X';
+        render();           // kanchum e  render() func n
+      }
+
+      render();             // kanchum e  render() func n
+    });
+  </script>
+</body>
+</html>
